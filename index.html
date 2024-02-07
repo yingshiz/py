@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>海通控制台</title>
+  <style>
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .button-container button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 16px;
+      margin: 0 5px; /* 添加间距 */
+    }
+    .button-container button:hover {
+      background-color: #0056b3;
+    }
+    .alert-container {
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="button-container">
+    <button id="start-htsc-btn">启动海通</button>
+    <button id="reload-btn">重启执行端</button>
+	<button id="tests-btn">测试卖</button>
+	<button id="testb-btn">测试买</button>
+	<button id="exit-htsc-btn">退出海通</button>
+	<button id="new-htsc-btn">新债申购</button>
+  </div>
+  <div class="alert-container"></div> <!-- 提示区div -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        $("#start-htsc-btn").click(function() {
+            $.get("/start_htsc", function(data, status) {
+               msg(data);
+            });
+        });
+		$("#new-htsc-btn").click(function() {
+            $.get("/auto_buynew", function(data, status) {
+               msg(data);
+            });
+        });
+         $("#exit-htsc-btn").click(function() {
+			 $.get("/exit_htsc");
+        });
+        $("#reload-btn").click(function() {
+            $.get("/reload", function(data, status) {
+                msg(data);
+            });
+        });
+		$("#tests-btn").click(function() {
+            $.get("/trade_api",{code:'127096',price:'128.55',num:'20',action:'sale'},function(data, status) {
+               msg(data);
+            });
+        });
+		$("#testb-btn").click(function() {
+            $.get("/trade_api",{code:'127096',price:'128.55',num:'20',action:'buy'},function(data, status) {
+               msg(data);
+            });
+        });
+    });
+	function msg(data){
+		// 将data显示在提示区div中
+        var alertContainer = $(".alert-container");
+        alertContainer.empty(); // 清空之前的提示信息
+        alertContainer.append("<p>" + data + "</p>"); // 添加新的提示信息
+	}
+  </script>
+</body>
+</html>
